@@ -1,3 +1,39 @@
 .card{
     margin-top: 10px;
 }
+
+img {
+    max-width: 200px;
+    margin: 10px;
+    display: inline-block;
+
+}
+
+.card-body {
+padding: 0px;
+
+}
+
+
+nav {
+
+    
+}
+
+
+@media (max-width: 600px) {
+
+.container {
+    padding-right: 0px;
+    padding-left: 0px;
+    }
+
+    .navbar-brand {
+    width: 100%;
+
+    }
+    .form-control {
+    width: auto;
+    margin-right: 20px;   
+
+}
