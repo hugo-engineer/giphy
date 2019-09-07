@@ -1,22 +1,21 @@
-// 1. create tipic Array
-// 2. allow search add to array
-// 3. setup api
-// 4. append buttons and images
+/*
+QUESTIONS
 
+1. Why line 41 dont need unqiue ID, how does it know which to append to?
+2. Click events not working for previous results
 
+*/
 
 var topics = 'sunset';
 
 // ['forest', 'park', 'sunrise','sunset'];
 var limit = 5;
 
-
-
 $("#search").on("click", function (e) {
     e.preventDefault();
     var kw = $("#keyword").val();
     console.log(kw);
-
+    
     var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + kw + "&api_key=wtCeJUwPyPnul9t4x3xgoWiB2kzPohiP&limit=" + limit;
 
     $.ajax({
@@ -24,7 +23,7 @@ $("#search").on("click", function (e) {
         method: 'get'
     }).then(function (list) {
 
-        var resultframe = "<div class='card'" + "id='" + kw + "'>" +
+        var resultframe = "<div class='card'><div class='card-body'" + "id='" + kw + "'>" +
             "<div class='card-header'>" + kw.toUpperCase() + "</div>" +
             "</div>";
 
@@ -33,51 +32,39 @@ $("#search").on("click", function (e) {
         for (i = 0; i < limit; i++) {
             console.log(list.data[i].images.fixed_width_still.url);
 
-            var html =
+            var elImage =
+            "<img src=" + list.data[i].images.fixed_width_still.url +
+            " data-still=" + list.data[i].images.fixed_width_still.url +
+            " data-animate=" + list.data[i].images.fixed_width.url +    
+            " data-state='still' ></div>"
 
-                "<div class='card-body'" +
-                " data-still=" + list.data[i].images.fixed_width_still.url +
-                " data-animate=" + list.data[i].images.fixed_width.url +
-                " data-state='still' >" + "<img src=" + list.data[i].images.fixed_width_still.url + ">" + "</div>";
-            $('#' + kw).append(html);
-
+            $('#' + kw).append(elImage); // remove spacing replacing function
+;   
         }
+        test(kw);
     });
+   
 });
 
-$(".card-body").on("click", function() {
+function test(search){
+    console.log('attaching events');
 
-    var still = $(this).attr("data-still");
-    var animate = $(this).attr("data-animate");    
-    var currentState = $(this).attr("data-state");
+    $("#" + search + " img").on("click", function() { //remove event listener than reattach
+        var still = $(this).attr("data-still");
+        var animate = $(this).attr("data-animate");    
+        var currentState = $(this).attr("data-state");
+    console.log('click')
+        if(currentState == "still") {
+    
+            $(this).attr("data-state", "animate");
+            $(this).attr("src", animate);
+        } else {
+            currentState == "animate";
+            $(this).attr("data-state", "still");
+            $(this).attr("src", still);
+        }
+    
+    });
+};
 
-    if(currentState == "still") {
-        $(this).attr("data-state", animate);
-        $(this).attr("src", animate);
-    } else {
-        currentState = "still";
-        $(this).attr("src", still);
-    }
-
-});
-
-
-// //  Class .gif on click function triggers
-//     $(".gif").on("click", function() {
-//   // Storing attribute in 'State = Still'
-//       var state = $(this).attr("data-state");
-  
-//       if (state == "still") {
-//   // storing attribute into animate
-//         var animate = $(this).attr("data-animate");
-//   // Replacing src tag with new
-//         $(this).attr("src", animate);
-//   // Replacing data-state tag with new
-//         $(this).attr("data-state", "animate");
-       
-//       } if (state == "animate") {
-//         var still = $(this).attr("data-still");
-//         $(this).attr("src", still);
-//         $(this).attr("data-state", "still");
-//       };
-
+// $("img").off('click').on("click", function() {
